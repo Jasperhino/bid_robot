@@ -52,17 +52,45 @@ void loop() {
 }
 
 void monitorBrightness(){
-  if (light_val_left-light_val_right < -9){
-    analogWrite(pin_led_left, 200);
-  }else{
-    analogWrite(pin_led_left, 0);
+
+
+  bool turn_back= false;
+
+  byte new_type_left = find_category(light_val_left);
+  byte new_type_right = find_category(light_val_right);
+
+  if(type_left!=type_right){
+    if(new_type_left!=type_left){
+
+      //align right side to left side
+      
+      if(((type_left+3)%3)-1==new_type_left){
+        //GOOD go on
+      }else{
+        //BAD go back
+      }
+
+      
+    }else{
+
+      //align left side to right side
+
+      
+      if(((type_right+3)%3)-1==new_type_right){
+        //GOOD go on
+      }else{
+        //BAD go back
+      }
+      
+    }
+
+
+
+    
   }
-  
-  if (light_val_left-light_val_right > 9){
-    analogWrite(pin_led_right, 200);
-  }else{
-    analogWrite(pin_led_right, 0);
-  }
+
+
+
 }
 
 void updateLightsensors(){
