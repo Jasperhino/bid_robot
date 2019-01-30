@@ -59,13 +59,32 @@ void collectData(){
   }
   analogWrite(pin_led_left, 0);
   analogWrite(pin_led_right, 0);
+  
+  sort(light_data,200);
+  
+  print_array(light_data);
+  delay(3000);
+}
 
 
+void sort(byte a[], int size) {
+    for(int i=0; i<(size-1); i++) {
+        for(int o=0; o<(size-(i+1)); o++) {
+                if(a[o] > a[o+1]) {
+                    byte t = a[o];
+                    a[o] = a[o+1];
+                    a[o+1] = t;
+                }
+        }
+    }
+}
+
+void print_array(byte table[]){
+  Serial.println(sizeof(table[0]));
   Serial.print("[");
   for(int i = 0; i < 200; i++){
-  Serial.print(" ");
-  Serial.print(light_data[i]);
-}
-  Serial.print("[");
-  delay(100000);
+    Serial.print(" ");
+    Serial.print(table[i]);
+  }
+  Serial.print("]");
 }
