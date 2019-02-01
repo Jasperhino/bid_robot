@@ -12,7 +12,7 @@ int motor2_Speed=A1;
 byte motor_power = 255;
 bool pwm_on = false;
 int motor_pwm_on = 10;
-int motor_pwm_off = 0;
+int motor_pwm_off = 10;
 long motor_on_timer;
 long motor_off_timer;
 
@@ -31,9 +31,6 @@ enum drive_status : byte {
 
 drive_status current_drive_status = D_IDLE;
 
-drive_status testdrive[] = {D_IDLE, D_LEFT, D_IDLE, D_RIGHT};//{D_IDLE, D_FORWARD, D_BACKWARD, D_LEFT, D_RIGHT, D_SPIN_LEFT, D_SPIN_RIGHT};
-byte dindex = 0;
-
 void setup(){
   Serial.begin(9600);
   pinMode(pin_lightsensor_left, INPUT_PULLUP);
@@ -44,7 +41,6 @@ void setup(){
   pinMode(motor2_A,OUTPUT);
   pinMode(motor2_B,OUTPUT);
   pinMode(motor2_Speed, OUTPUT);
-
 
   motor_on_timer = millis();
   motor_off_timer = millis() + motor_pwm_on; 
@@ -64,22 +60,6 @@ void brain(){
     dindex++;
     if(dindex > 6) dindex = 0;
     brain_timer = millis();
-  }
-}
-
-void readSerial(){
-  if(Serial.available() > 0) {
-    byte b = Serial.read();
-    switch(b) {
-      case 'w': current_drive_status = D_FORWARD; break;
-      case 'a': current_drive_status = D_LEFT; break;
-      case 's': current_drive_status = D_BACKWARD; break;
-      case 'd': current_drive_status = D_RIGHT; break;
-      case 'e': current_drive_status = D_SPIN_RIGHT; break;
-      case 'q': current_drive_status = D_SPIN_LEFT; break;
-      default: current_drive_status = D_IDLE; break;
-    }
-    print_drive_status();
   }
 }
 
@@ -176,4 +156,21 @@ void print_drive_status() {
     default: break;
   }
   Serial.println(result);
+}
+
+//Debugging
+void readSerial(){
+  if(Serial.available() > 0) {
+    byte b = Serial.read();
+    switch(b) {
+      case 'w': current_drive_status = D_FORWARD; break;
+      case 'a': current_drive_status = D_LEFT; break;
+      case 's': current_drive_status = D_BACKWARD; break;
+      case 'd': current_drive_status = D_RIGHT; break;
+      case 'e': current_drive_status = D_SPIN_RIGHT; break;
+      case 'q': current_drive_status = D_SPIN_LEFT; break;
+      default: current_drive_status = D_IDLE; break;
+    }
+    print_drive_status();
+  }
 }

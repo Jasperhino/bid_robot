@@ -1,11 +1,11 @@
 byte mean_table[3];
 
 byte find_category(byte point){
-  byte dist=abs(point-mean_table[0]);
+  byte dist = abs(point - mean_table[0]);
 //  Serial.println(dist);
-  if (dist>abs(point-mean_table[1])){
-    dist=abs(point-mean_table[1]);
-    if (dist>abs(point-mean_table[2])){
+  if (dist > abs(point-mean_table[1])){
+    dist = abs(point-mean_table[1]);
+    if (dist > abs(point-mean_table[2])){
       return(2);
     }
     return(1);

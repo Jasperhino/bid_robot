@@ -2,13 +2,13 @@
 int pin_lightsensor_left = A2;
 int pin_lightsensor_right = A3;
 
-int motor1_A=10;
-int motor1_B=8;
-int motor1_Speed=A0;
+int motor1_A = 10;
+int motor1_B = 8;
+int motor1_Speed = A0;
  
-int motor2_A=6;
-int motor2_B=4;
-int motor2_Speed=A1;
+int motor2_A = 6;
+int motor2_B = 4;
+int motor2_Speed = A1;
 
 //CONSTANTS
 enum drive_status : byte {
@@ -38,18 +38,28 @@ int motor_pwm_off = 10;
 
 bool log_sensors = false;
 
+//PHASE TIMER
+long exploring_interval = 5000;
+long exploring_timer;
+
+long finish_interval = 2000;
+long turn_timer;
+
 //PSEUDO MULTITHREADING TIMERS
 long motor_on_timer;
 long motor_off_timer;
 
-long brain_intervalr = 0;
+long brain_timer;
 long brain_interval = 1000;
 
 //MEMORY
+//TODO: do i need this?
 byte sensor_val_left;
 byte sensor_val_right;
 
-byte histogramm [200];
+byte histogram [200];
+int histogram_index = 0;
+
 #define BUFFER_SIZE 5
 #define MEMORY_SIZE 20
 byte sensor_left_buffer [BUFFER_SIZE];
@@ -67,11 +77,14 @@ void setup(){
   pinMode(motor2_A,OUTPUT);
   pinMode(motor2_B,OUTPUT);
   pinMode(motor2_Speed, OUTPUT);
-  
+
+  //start timers
   motor_on_timer = millis();
-  motor_off_timer = millis() + motor_pwm_on; 
+  motor_off_timer = millis() + motor_pwm_on;
+  brain_timer = millis();
+  exploring_timer = millis();
 }
- 
+
 void loop(){
   readSensors();
   brain();
@@ -79,10 +92,23 @@ void loop(){
 }
 
 void brain(){
-  //Serial.println(brain_intervalr);
-  if(millis() > brain_intervalr + brain_interval){
-    brain_intervalr = millis();
-    //print_drive_status();
+  if(millis() > brain_timer + brain_interval){
+    brain_timer = millis();
+
+    if(mission_status == EXPLORING){
+      if(millis() > exploring_timer + exploring_interval){
+        current_mission_status == TO_DESTINATION; return
+      }
+    }
+
+    if(mission_status == TO_DESTINATION){
+      to_destination();
+    }
+
+    if (mission_status == FINISHED){
+      //We are DONE
+      Serial.println("DONE!")
+    }
   }
 }
 
