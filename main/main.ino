@@ -28,6 +28,7 @@ enum mission_status : byte {
 };
 
 //SETTINGS
+byte robot_direction = 0;
 mission_status current_mission_status = EXPLORING;
 drive_status current_drive_status = D_IDLE;
 
@@ -39,7 +40,7 @@ int motor_pwm_off = 10;
 bool log_sensors = false;
 
 //PHASE TIMER
-long exploring_interval = 5000;
+long exploring_interval = 4000;
 long exploring_timer;
 
 long finish_interval = 2000;
@@ -53,7 +54,6 @@ long brain_timer;
 long brain_interval = 1000;
 
 //MEMORY
-//TODO: do i need this?
 byte sensor_val_left;
 byte sensor_val_right;
 
@@ -64,8 +64,8 @@ int histogram_index = 0;
 #define MEMORY_SIZE 20
 byte sensor_left_buffer [BUFFER_SIZE];
 byte sensor_right_buffer [BUFFER_SIZE];
-byte sensor_left_memory [MEMORY_SIZE];
-byte sensor_right_memory [MEMORY_SIZE];
+byte sensor_last_left;
+byte sensor_last_right;
 
 void setup(){
   Serial.begin(9600);
@@ -96,8 +96,9 @@ void brain(){
     brain_timer = millis();
 
     if(mission_status == EXPLORING){
+      explore();
       if(millis() > exploring_timer + exploring_interval){
-        current_mission_status == TO_DESTINATION; return
+        current_mission_status == TO_DESTINATION;
       }
     }
 

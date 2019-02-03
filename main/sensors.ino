@@ -12,8 +12,9 @@ void readSensors(){
     byte average_right = average_buffer(sensor_right_buffer);
 
     if(current_mission_status == EXPLORING){
-      histogram[histogram_index] = char((average_left + average_right) / 2);
-      histogram_index++;
+      histogram[histogram_index] = average_left;
+      histogram[histogram_index + 1] = average_right;
+      
     } else {
       sensor_left_memory[memory_index] = average_left;
       sensor_right_memory[memory_index] = average_right;

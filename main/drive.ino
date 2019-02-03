@@ -11,6 +11,34 @@ void drive_in_current_direction(){
   }
 }
 
+void drive_in_direction(byte d){
+  drive_right(d);
+  drive_left(d);
+}
+
+void drive_right(byte d){
+  digitalWrite(motor2_A, (d + 1) % 2); // A = HIGH and B = LOW means the motor will turn right
+  digitalWrite(motor2_B, d % 2);
+  analogWrite(motor2_Speed, motor_power);
+}
+
+void drive_left(byte d){
+  digitalWrite(motor1_A, d % 2); // A = HIGH and B = LOW means the motor will turn right
+  digitalWrite(motor1_B, (d + 1) % 2);
+  analogWrite(motor1_Speed, motor_power);
+}
+
+void spin_left_new(byte d){
+  drive_right(d);
+  drive_left(d + 1);
+}
+
+void spin_right_new(){
+  drive_right(d + 1);
+  drive_left(d);
+}
+
+//old drive functions-------------------------------
 void drive_forward(){
   drive_left_forward();
   drive_right_forward(); 
@@ -32,26 +60,14 @@ void spin_right(){
 }
 
 void drive_left_forward(){
-  digitalWrite(motor1_A,LOW); // A = HIGH and B = LOW means the motor will turn right
-  digitalWrite(motor1_B,HIGH);
-  analogWrite(motor1_Speed, motor_power);
-}
-
-void drive_left_backward(){
-  digitalWrite(motor1_A,HIGH); // A = HIGH and B = LOW means the motor will turn right
-  digitalWrite(motor1_B,LOW);
+  digitalWrite(motor1_A, LOW); // A = HIGH and B = LOW means the motor will turn right
+  digitalWrite(motor1_B, HIGH);
   analogWrite(motor1_Speed, motor_power);
 }
 
 void drive_right_forward(){
   digitalWrite(motor2_A, HIGH); // A = HIGH and B = LOW means the motor will turn right
   digitalWrite(motor2_B, LOW);
-  analogWrite(motor2_Speed, motor_power);
-}
-
-void drive_right_backward(){
-  digitalWrite(motor2_A, LOW); // A = HIGH and B = LOW means the motor will turn right
-  digitalWrite(motor2_B, HIGH);
   analogWrite(motor2_Speed, motor_power);
 }
 
