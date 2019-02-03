@@ -19,7 +19,7 @@ void print_status(){
   print_mission_status();
   print_drive_status();
   print_direction();
-  print_histogram;
+  print_histogram();
   print_mean_table();
   print_sensors();
   print_buffers();
@@ -42,10 +42,10 @@ void print_drive_status() {
 }
 
 void print_mission_status() {
-  String result = "not a drive status";
+  String result = "not a mission status";
   switch (current_mission_status) {
     case EXPLORING: result = "Exploring"; break;
-    case TO_DESTINATION: result = "Backward"; break;
+    case TO_DESTINATION: result = "To Destination"; break;
     case FINISHED: result = "Finished"; break;
     default: break;
   }
@@ -59,8 +59,10 @@ void print_direction(){
 }
 
 void print_histogram(){
-  Serial.print("Hostogram: ");
-  print_array(histogram, 200);
+  Serial.print("Histogram Index: ");
+  Serial.println(histogram_index);
+  Serial.print("Histogram: ");
+  print_array(histogram, HISTOGRAM_SIZE);
 }
 
 void print_mean_table(){

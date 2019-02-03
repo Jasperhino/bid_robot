@@ -30,6 +30,8 @@ enum drive_status : byte {
 };
 
 drive_status current_drive_status = D_IDLE;
+drive_status testdrive[] = {D_IDLE, D_FORWARD, D_BACKWARD};
+byte dindex = 0;
 
 void setup(){
   Serial.begin(9600);

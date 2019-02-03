@@ -1,3 +1,10 @@
+void explore(){
+  current_drive_status = D_SPIN_LEFT;
+  if(histogram_index < HISTOGRAM_SIZE / 2){
+    current_drive_status = D_SPIN_RIGHT;
+  }
+}
+
 byte type_left = -1;
 byte type_right = -1;
 
@@ -32,18 +39,5 @@ void to_destination(){
         //BAD go back
       }
     }
-  }
-}
-
-void explore(){
-  if(millis() < exploring_timer + (exploring_interval / 2)){
-    spin_right();
-  } else {
-    spin_left();
-  }
-  
-  if(millis() > exploring_timer + exploring_interval){
-    current_mission_status == TO_DESTINATION;
-    drive_idle();
   }
 }

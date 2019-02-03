@@ -40,8 +40,8 @@ int motor_pwm_off = 10;
 bool log_sensors = false;
 
 //PHASE TIMER
-long exploring_interval = 4000;
-long exploring_timer;
+long exploring_sensor_interval = 100;
+long exploring_sensor_timer;
 
 long finish_interval = 2000;
 long turn_timer;
@@ -60,11 +60,11 @@ byte sensor_right;
 byte sensor_last_left;
 byte sensor_last_right;
 
-byte histogram [200];
+#define HISTOGRAM_SIZE 200
+byte histogram [HISTOGRAM_SIZE];
 int histogram_index = 0;
 
-#define BUFFER_SIZE 5
-#define MEMORY_SIZE 20
+#define BUFFER_SIZE 10
 byte sensor_buffer_left [BUFFER_SIZE];
 byte sensor_buffer_right [BUFFER_SIZE];
 byte buffer_index = 0;
@@ -86,7 +86,7 @@ void setup(){
   motor_on_timer = millis();
   motor_off_timer = millis() + motor_pwm_on;
   brain_timer = millis();
-  exploring_timer = millis();
+  exploring_sensor_timer = millis();
 }
 
 void loop(){
@@ -97,21 +97,17 @@ void loop(){
 }
 
 void brain(){
-  if(millis() > brain_timer + brain_interval){
-    brain_timer = millis();
+  if(current_mission_status == EXPLORING){
+    explore();
+  }
 
-    if(current_mission_status == EXPLORING){
-      explore();
-    }
+  if(current_mission_status == TO_DESTINATION){
+    to_destination();
+  }
 
-    if(current_mission_status == TO_DESTINATION){
-      to_destination();
-    }
-
-    if (current_mission_status == FINISHED){
-      //We are DONE
-      Serial.println("DONE!");
-    }
+  if (current_mission_status == FINISHED){
+    //We are DONE
+    Serial.println("DONE!");
   }
 }
 
