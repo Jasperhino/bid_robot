@@ -54,18 +54,22 @@ long brain_timer;
 long brain_interval = 1000;
 
 //MEMORY
-byte sensor_val_left;
-byte sensor_val_right;
+byte sensor_left;
+byte sensor_right;
+
+byte sensor_last_left;
+byte sensor_last_right;
 
 byte histogram [200];
 int histogram_index = 0;
 
 #define BUFFER_SIZE 5
 #define MEMORY_SIZE 20
-byte sensor_left_buffer [BUFFER_SIZE];
-byte sensor_right_buffer [BUFFER_SIZE];
-byte sensor_last_left;
-byte sensor_last_right;
+byte sensor_buffer_left [BUFFER_SIZE];
+byte sensor_buffer_right [BUFFER_SIZE];
+byte buffer_index = 0;
+
+byte mean_table[3];
 
 void setup(){
   Serial.begin(9600);
@@ -86,6 +90,7 @@ void setup(){
 }
 
 void loop(){
+  readSerial();
   readSensors();
   brain();
   drive();
@@ -95,20 +100,17 @@ void brain(){
   if(millis() > brain_timer + brain_interval){
     brain_timer = millis();
 
-    if(mission_status == EXPLORING){
+    if(current_mission_status == EXPLORING){
       explore();
-      if(millis() > exploring_timer + exploring_interval){
-        current_mission_status == TO_DESTINATION;
-      }
     }
 
-    if(mission_status == TO_DESTINATION){
+    if(current_mission_status == TO_DESTINATION){
       to_destination();
     }
 
-    if (mission_status == FINISHED){
+    if (current_mission_status == FINISHED){
       //We are DONE
-      Serial.println("DONE!")
+      Serial.println("DONE!");
     }
   }
 }

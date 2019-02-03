@@ -1,37 +1,31 @@
-byte buffer_index = 0;
-byte memory_index = 0;
-
 void readSensors(){
-  sensor_val_left = char(analogRead(pin_lightsensor_left));
-  sensor_val_right = char(analogRead(pin_lightsensor_right));
+  sensor_buffer_left[buffer_index] = char(analogRead(pin_lightsensor_left));
+  sensor_buffer_right[buffer_index] = char(analogRead(pin_lightsensor_right));
   buffer_index++;
   
   if(buffer_index >= BUFFER_SIZE){
     buffer_index = 0;
-    byte average_left = average_buffer(sensor_left_buffer);
-    byte average_right = average_buffer(sensor_right_buffer);
-
+    byte median_left = median_buffer(sensor_buffer_left);
+    byte median_right = median_buffer(sensor_buffer_right);
+    
     if(current_mission_status == EXPLORING){
-      histogram[histogram_index] = average_left;
-      histogram[histogram_index + 1] = average_right;
+      histogram[histogram_index] = median_left;
+      histogram[histogram_index + 1] = median_right;
       
     } else {
-      sensor_left_memory[memory_index] = average_left;
-      sensor_right_memory[memory_index] = average_right;
-      memory_index++;
-      
-      if(memory_index >= MEMORY_SIZE){
-        memory_index = 0;
-      }
+      sensor_last_left = sensor_left;
+      sensor_last_right = sensor_right;
+      sensor_left = median_left;
+      sensor_right = median_right;
     }
   }
   
   if(log_sensors){
     Serial.print("Left: ");
-    Serial.print(sensor_val_left);
+    Serial.print(sensor_left);
     Serial.print(" - ");
     Serial.print("Right: ");
-    Serial.println(sensor_val_right);
+    Serial.println(sensor_right);
   }
 }
 
@@ -41,6 +35,11 @@ byte average_buffer(byte b[]) {
     sum += b[i];
   }
   return char(sum / BUFFER_SIZE);
+}
+
+byte median_buffer(byte b[]) {
+  sort(b, BUFFER_SIZE);
+  return b[(BUFFER_SIZE + 1) / 2];
 }
 
 byte getMemoryAt(byte b[], int i){

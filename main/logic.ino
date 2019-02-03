@@ -17,7 +17,7 @@ void to_destination(){
         //GOOD go on
       } else {
         //BAD go back
-        go_backwards = true
+        go_backwards = true;
       }
 
       
@@ -32,8 +32,18 @@ void to_destination(){
         //BAD go back
       }
     }
+  }
+}
+
+void explore(){
+  if(millis() < exploring_timer + (exploring_interval / 2)){
+    spin_right();
   } else {
-    if (go_) 
-    drive_forward();
+    spin_left();
+  }
+  
+  if(millis() > exploring_timer + exploring_interval){
+    current_mission_status == TO_DESTINATION;
+    drive_idle();
   }
 }
