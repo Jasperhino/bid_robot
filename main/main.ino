@@ -32,7 +32,7 @@ byte robot_direction = 0;
 mission_status current_mission_status = EXPLORING;
 drive_status current_drive_status = D_IDLE;
 
-byte motor_power = 255;
+byte motor_power = 140;
 bool pwm_on = false;
 int motor_pwm_on = 10;
 int motor_pwm_off = 10;
@@ -57,8 +57,8 @@ long brain_interval = 1000;
 byte sensor_left;
 byte sensor_right;
 
-byte sensor_last_left;
-byte sensor_last_right;
+byte sensor_old_left;
+byte sensor_old_right;
 
 #define HISTOGRAM_SIZE 200
 byte histogram [HISTOGRAM_SIZE];
@@ -70,6 +70,9 @@ byte sensor_buffer_right [BUFFER_SIZE];
 byte buffer_index = 0;
 
 byte mean_table[3];
+
+byte category = -1;
+byte old_category = -1;
 
 void setup(){
   Serial.begin(9600);

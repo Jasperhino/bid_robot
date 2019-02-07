@@ -24,8 +24,8 @@ void readSensors(){
         Serial.println("Finished Exploring");
       }
     } else {
-      sensor_last_left = sensor_left;
-      sensor_last_right = sensor_right;
+      sensor_old_left = sensor_left;
+      sensor_old_right = sensor_right;
       sensor_left = median_left;
       sensor_right = median_right;
     }

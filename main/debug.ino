@@ -10,6 +10,7 @@ void readSerial(){
       case 'e': current_drive_status = D_SPIN_RIGHT; break;
       case 'q': current_drive_status = D_SPIN_LEFT; break;
       case 'p': print_status(); break;
+      case 'r': change_to_exploring(); break;
       default: current_drive_status = D_IDLE; break;
     }
   }
@@ -21,6 +22,7 @@ void print_status(){
   print_direction();
   print_histogram();
   print_mean_table();
+  print_categories();
   print_sensors();
   print_buffers();
 }
@@ -70,16 +72,23 @@ void print_mean_table(){
   print_array(mean_table, 3);
 }
 
+void print_categories(){
+  Serial.print("Category: ");
+  Serial.println(category);
+  Serial.print("Category Old: ");
+  Serial.println(old_category);
+}
+
 void print_sensors(){
   Serial.print("Sensor Left: ");
   Serial.println(sensor_left);
   Serial.print("Sensor Right: ");
   Serial.println(sensor_right);
 
-  Serial.print("Sensor Last Left: ");
-  Serial.println(sensor_last_left);
-  Serial.print("Sensor Last Right: ");
-  Serial.println(sensor_last_right);
+  Serial.print("Sensor Old Left: ");
+  Serial.println(sensor_old_left);
+  Serial.print("Sensor Old Right: ");
+  Serial.println(sensor_old_right);
 }
 
 void print_buffers(){

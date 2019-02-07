@@ -11,6 +11,13 @@ void drive_in_current_direction(){
   }
 }
 
+void change_direction(){
+  robot_direction = (robot_direction + 1) % 2;
+  
+  Serial.print("Changed Direction to: ");
+  Serial.println(robot_direction);
+}
+
 void drive_in_direction(byte d){
   drive_right(d);
   drive_left(d);

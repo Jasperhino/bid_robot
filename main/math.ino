@@ -11,15 +11,15 @@ byte find_category(byte point){
   return(0);
 }
 
+void k3_mean(byte points[], int s){
 
-void k3_mean(byte points[], int size){
+  mean_table[0] = points[char(s * 0.3)];
+  mean_table[1] = points[char(s * 0.5)];
+  mean_table[2] = points[char(s * 0.7)];
   
-  mean_table[0] = size * 0.30;
-  mean_table[1] = size * 0.50;
-  mean_table[2] = size * 0.70;
 
-  byte cat_table[size];
-  for (int i; i < size; i++){
+  byte cat_table[s];
+  for (int i; i < s; i++){
       cat_table[i] = -1;
   }
     
@@ -33,23 +33,16 @@ void k3_mean(byte points[], int size){
     
     int mean_table_temp[3] = {0,0,0};
     
-    //print_array(mean_table,3);
     flag = false;
     
-    for(int i=0; i < size; i++){
+    for(int i = 0; i < s; i++){
       byte new_category = find_category(points[i]);
 
-     switch (new_category){
-      case 0:
-        white_counter++;
-        break;
-      case 1:
-        grey_counter++;
-        break;
-      default:
-        black_counter++;
-    }
-    
+      switch (new_category){
+        case 0:white_counter++; break;
+        case 1:grey_counter++; break;
+        default: black_counter++; break;
+      }
       mean_table_temp[new_category] += points[i];
       
       if (cat_table[i] != new_category){
