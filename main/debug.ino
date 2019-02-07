@@ -73,10 +73,15 @@ void print_mean_table(){
 }
 
 void print_categories(){
-  Serial.print("Category: ");
-  Serial.println(category);
-  Serial.print("Category Old: ");
-  Serial.println(old_category);
+  Serial.print("Category Left: ");
+  Serial.println(category_left);
+  Serial.print("Category Left Old: ");
+  Serial.println(old_category_left);
+
+  Serial.print("Category Right: ");
+  Serial.println(category_right);
+  Serial.print("Category Right Old: ");
+  Serial.println(old_category_right);
 }
 
 void print_sensors(){

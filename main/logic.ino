@@ -1,21 +1,32 @@
 void explore(){
-  current_drive_status = D_SPIN_LEFT;
+  current_drive_status = D_LEFT;
   if(histogram_index < HISTOGRAM_SIZE / 2){
-    current_drive_status = D_SPIN_RIGHT;
+    current_drive_status = D_RIGHT;
   }
 }
 
+void change_direction(){
+  if(millis() > change_direction_timer + change_direction_interval){
+    change_direction_timer = millis();
+    robot_direction = (robot_direction + 1) % 2;
+  
+    Serial.print("Changed Direction to: ");
+    Serial.println(robot_direction);
+  }
+  
+}
+
 void to_destination(){
-  byte category_left = find_category(sensor_left);
-  byte category_right = find_category(sensor_right);
-  byte old_category_left = find_category(sensor_old_left);
-  byte old_category_right = find_category(sensor_old_right);
+  category_left = find_category(sensor_left);
+  category_right = find_category(sensor_right);
 
   if(category_left != category_right){
-    old_category = category;
-    if(category_left != old_category_left){
+    if(old_category_left == old_category_right){
+
       
-      category = category_left;
+    }
+    if(category_left != old_category_left){
+     
       //align right side to left side
       current_drive_status = D_RIGHT;
       
@@ -23,9 +34,7 @@ void to_destination(){
         //BAD go back
         change_direction();
       }      
-    } else {
-      category = category_right;
-      
+    } else {      
       //align left side to right side
       current_drive_status = D_LEFT;
       
@@ -35,9 +44,15 @@ void to_destination(){
       }
     }
   } else {
-    category = category_left;
+    if(((old_category_right + 1 + 3) % 3) == category_right){
+        //BAD go back
+        change_direction();
+    }
     current_drive_status = D_FORWARD;
+    old_category_left = category_left;
+    old_category_right = category_right;
   }
+  
 }
 
 void change_to_exploring(){

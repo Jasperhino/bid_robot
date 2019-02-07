@@ -1,21 +1,14 @@
 void drive_in_current_direction(){
   switch (current_drive_status) {
-    case D_FORWARD: drive_forward(); break;
-    case D_BACKWARD: drive_backward(); break;
-    case D_LEFT: drive_left_forward(); break;
-    case D_RIGHT: drive_right_forward(); break;
-    case D_SPIN_LEFT: spin_left(); break;
-    case D_SPIN_RIGHT: spin_right(); break;
+    case D_FORWARD: drive_idle(); drive_in_direction(robot_direction); break;
+    case D_BACKWARD: drive_idle(); drive_backward(); break;
+    case D_LEFT: drive_idle(); drive_left(robot_direction); break;
+    case D_RIGHT: drive_idle(); drive_right(robot_direction); break;
+    case D_SPIN_LEFT: drive_idle(); spin_left(); break;
+    case D_SPIN_RIGHT: drive_idle(); spin_right(); break;
     case D_IDLE: drive_idle(); break;
     default: break;
   }
-}
-
-void change_direction(){
-  robot_direction = (robot_direction + 1) % 2;
-  
-  Serial.print("Changed Direction to: ");
-  Serial.println(robot_direction);
 }
 
 void drive_in_direction(byte d){
@@ -57,12 +50,12 @@ void drive_idle(){
 //TODO: remove old drive functions-------------------------------
 void drive_in_current_direction_old(){
   switch (current_drive_status) {
-    case D_FORWARD: drive_forward(); break;
-    case D_BACKWARD: drive_backward(); break;
-    case D_LEFT: drive_left_forward(); break;
-    case D_RIGHT: drive_right_forward(); break;
-    case D_SPIN_LEFT: spin_left(); break;
-    case D_SPIN_RIGHT: spin_right(); break;
+    case D_FORWARD: drive_idle(); drive_forward(); break;
+    case D_BACKWARD: drive_idle(); drive_backward(); break;
+    case D_LEFT: drive_idle(); drive_left_forward(); break;
+    case D_RIGHT: drive_idle(); drive_right_forward(); break;
+    case D_SPIN_LEFT: drive_idle(); spin_left(); break;
+    case D_SPIN_RIGHT: drive_idle(); spin_right(); break;
     case D_IDLE: drive_idle(); break;
     default: break;
   }

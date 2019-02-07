@@ -53,6 +53,9 @@ long motor_off_timer;
 long brain_timer;
 long brain_interval = 1000;
 
+long change_direction_timer;
+long change_direction_interval = 300;
+
 //MEMORY
 byte sensor_left;
 byte sensor_right;
@@ -71,8 +74,10 @@ byte buffer_index = 0;
 
 byte mean_table[3];
 
-byte category = -1;
-byte old_category = -1;
+byte category_left;
+byte category_right;
+byte old_category_left = -1;
+byte old_category_right = -1;
 
 void setup(){
   Serial.begin(9600);
@@ -90,6 +95,7 @@ void setup(){
   motor_off_timer = millis() + motor_pwm_on;
   brain_timer = millis();
   exploring_sensor_timer = millis();
+  change_direction_timer = millis();
 }
 
 void loop(){
