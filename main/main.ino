@@ -40,7 +40,7 @@ int motor_pwm_off = 10;
 bool log_sensors = false;
 
 //PHASE TIMER
-long exploring_sensor_interval = 100;
+long exploring_sensor_interval = 50;
 long exploring_sensor_timer;
 
 long finish_interval = 2000;

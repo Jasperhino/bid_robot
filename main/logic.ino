@@ -16,38 +16,39 @@ void change_direction(){
   
 }
 
+bool aligning = false;
+
 void to_destination(){
   category_left = find_category(sensor_left);
   category_right = find_category(sensor_right);
 
-  if(category_left != category_right){
-    if(old_category_left == old_category_right){
-
-      
-    }
+  if(category_left != category_right && !aligning){
+    aligning = true;
     if(category_left != old_category_left){
      
       //align right side to left side
       current_drive_status = D_RIGHT;
       
-      if(((old_category_left + 1 + 3) % 3) == category_left){
+      /*if(((old_category_left + 1 + 3) % 3) == category_left){
         //BAD go back
         change_direction();
-      }      
+      }*/
     } else {      
       //align left side to right side
       current_drive_status = D_LEFT;
       
-      if(((old_category_right + 1 + 3) % 3) == category_right){
+      /*if(((old_category_right + 1 + 3) % 3) == category_right){
         //BAD go back
         change_direction();
-      }
+      }*/
     }
   } else {
-    if(((old_category_right + 1 + 3) % 3) == category_right){
+    
+    if(((old_category_right + 1 + 3) % 3) == category_right && aligning){
         //BAD go back
         change_direction();
     }
+    aligning = false;
     current_drive_status = D_FORWARD;
     old_category_left = category_left;
     old_category_right = category_right;
